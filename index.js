@@ -39,11 +39,16 @@ async function run() {
     })
 
     app.get('/idea/:id',async(req,res)=>{
-      const id = req.params
-      // console.log(id);
-      const result= await ideasCollection.findOne({_id: new ObjectId(id)})
-      res.send(result)
+      const {id} = req.params
+      console.log(id);
+      const result= await ideasCollection.findOne({_id : new ObjectId(id)})
+      res.json(result)
     })
+    app.get('/idea/user/:userId', async (req, res) => {
+    const { userId } = req.params;
+    const result = await ideasCollection.find({ userId }).toArray();
+    res.send(result);
+});
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     // Send a ping to confirm a successful connection

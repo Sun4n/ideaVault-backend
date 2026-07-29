@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const dotenv= require("dotenv")
+const dotenv = require("dotenv")
 dotenv.config()
 const cors = require('cors')
 const port = process.env.PORT;
@@ -24,31 +24,38 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
 
-    const db= await client.db('ideavault')
+    const db = await client.db('ideavault')
     const ideasCollection = await db.collection('ideas')
 
-    app.post('/idea',async(req,res)=>{
+    app.post('/idea', async (req, res) => {
       const ideaData = req.body
       // console.log(ideaData);
       const result = await ideasCollection.insertOne(ideaData)
       res.send(result)
     })
-    app.get('/idea',async(req,res)=>{
+    app.get('/idea', async (req, res) => {
       const result = await ideasCollection.find().toArray()
       res.send(result)
     })
 
-    app.get('/idea/:id',async(req,res)=>{
-      const {id} = req.params
+    app.get('/idea/:id', async (req, res) => {
+      const { id } = req.params
       console.log(id);
-      const result= await ideasCollection.findOne({_id : new ObjectId(id)})
+      const result = await ideasCollection.findOne({ _id: new ObjectId(id) })
       res.json(result)
     })
     app.get('/idea/user/:userId', async (req, res) => {
-    const { userId } = req.params;
-    const result = await ideasCollection.find({ userId }).toArray();
-    res.send(result);
-});
+      const { userId } = req.params;
+      const result = await ideasCollection.find({ userId }).toArray();
+      res.send(result);
+    });
+    app.patch('/idea/:id',async(req,res)=>{
+      const {id} = req.params
+      console.log(id);
+      const updateData= req.body
+      const result = await ideasCollection.updateOne({_id: new ObjectId(id)},{$set:updateData})
+      res.json(result)
+    })
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     // Send a ping to confirm a successful connection

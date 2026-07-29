@@ -26,6 +26,7 @@ async function run() {
 
     const db = await client.db('ideavault')
     const ideasCollection = await db.collection('ideas')
+    const commentCollection = await db.collection('comment')
 
     app.post('/idea', async (req, res) => {
       const ideaData = req.body
@@ -51,10 +52,23 @@ async function run() {
     });
     app.patch('/idea/:id',async(req,res)=>{
       const {id} = req.params
-      console.log(id);
+      // console.log(id);
       const updateData= req.body
       const result = await ideasCollection.updateOne({_id: new ObjectId(id)},{$set:updateData})
       res.json(result)
+    })
+    app.delete('/idea/:id',async(req,res)=>{
+      const {id} = req.params
+      // console.log(id);
+      const result = await ideasCollection.deleteOne({_id:new ObjectId(id)})
+      res.json(result)
+    })
+    app.post('/comment',async(req,res)=>{
+      const data = req.body
+      console.log(data);
+      const result = await commentCollection.insertOne(data)
+      res.send(result)
+
     })
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();

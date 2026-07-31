@@ -41,7 +41,7 @@ async function run() {
 
     app.get('/idea/:id', async (req, res) => {
       const { id } = req.params
-      console.log(id);
+      // console.log(id);
       const result = await ideasCollection.findOne({ _id: new ObjectId(id) })
       res.json(result)
     })
@@ -65,10 +65,19 @@ async function run() {
     })
     app.post('/comment',async(req,res)=>{
       const data = req.body
-      console.log(data);
+      // console.log(data);
       const result = await commentCollection.insertOne(data)
       res.send(result)
 
+    })
+    app.get('/comment',async(req,res)=>{
+      const result=await commentCollection.find().toArray()
+      res.send(result)
+    })
+    app.get('/comment/:ideaId', async (req, res) => {
+      const { ideaId } = req.params
+      const result = await commentCollection.find({ideaId}).toArray()
+      res.json(result)
     })
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();

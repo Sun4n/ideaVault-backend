@@ -50,33 +50,52 @@ async function run() {
       const result = await ideasCollection.find({ userId }).toArray();
       res.send(result);
     });
-    app.patch('/idea/:id',async(req,res)=>{
-      const {id} = req.params
+    app.patch('/idea/:id', async (req, res) => {
+      const { id } = req.params
       // console.log(id);
-      const updateData= req.body
-      const result = await ideasCollection.updateOne({_id: new ObjectId(id)},{$set:updateData})
+      const updateData = req.body
+      const result = await ideasCollection.updateOne({ _id: new ObjectId(id) }, { $set: updateData })
       res.json(result)
     })
-    app.delete('/idea/:id',async(req,res)=>{
-      const {id} = req.params
+    app.delete('/idea/:id', async (req, res) => {
+      const { id } = req.params
       // console.log(id);
-      const result = await ideasCollection.deleteOne({_id:new ObjectId(id)})
+      const result = await ideasCollection.deleteOne({ _id: new ObjectId(id) })
       res.json(result)
     })
-    app.post('/comment',async(req,res)=>{
+    app.post('/comment', async (req, res) => {
       const data = req.body
       // console.log(data);
       const result = await commentCollection.insertOne(data)
       res.send(result)
 
     })
-    app.get('/comment',async(req,res)=>{
-      const result=await commentCollection.find().toArray()
+    app.get('/comment', async (req, res) => {
+      const result = await commentCollection.find().toArray()
       res.send(result)
     })
     app.get('/comment/:ideaId', async (req, res) => {
       const { ideaId } = req.params
-      const result = await commentCollection.find({ideaId}).toArray()
+      const result = await commentCollection.find({ ideaId }).toArray()
+      res.json(result)
+    })
+    app.get('/comment/user/:userId', async (req, res) => {
+      const { userId } = req.params
+      const result = await commentCollection.find({ userId }).toArray()
+      res.json(result)
+    })
+    app.patch('/comment/:id',async(req,res)=>{
+      const { id } = req.params
+      // console.log(id);
+      const updateData = req.body
+      const result = await commentCollection.updateOne({ _id: new ObjectId(id) }, { $set: updateData })
+      res.json(result)
+    })
+    app.delete('/comment/:id',async(req,res)=>{
+      const { id } = req.params
+      // console.log(id);
+      const updateData = req.body
+      const result = await commentCollection.deleteOne({ _id: new ObjectId(id) })
       res.json(result)
     })
     // Connect the client to the server	(optional starting in v4.7)

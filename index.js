@@ -81,7 +81,7 @@ async function run() {
       const result = await ideasCollection.findOne({ _id: new ObjectId(id) })
       res.json(result)
     })
-    app.get('/idea/user/:userId', async (req, res) => {
+    app.get('/idea/user/:userId',verifyToken, async (req, res) => {
       const { userId } = req.params;
       const result = await ideasCollection.find({ userId }).toArray();
       res.send(result);
@@ -115,7 +115,7 @@ async function run() {
       const result = await commentCollection.find({ ideaId }).toArray()
       res.json(result)
     })
-    app.get('/comment/user/:userId' ,async (req, res) => {
+    app.get('/comment/user/:userId',verifyToken ,async (req, res) => {
       const { userId } = req.params
       const result = await commentCollection.find({ userId }).toArray()
       res.json(result)

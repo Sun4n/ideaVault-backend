@@ -59,7 +59,7 @@ async function run() {
     const ideasCollection = await db.collection('ideas')
     const commentCollection = await db.collection('comment')
 
-    app.post('/idea',verifyToken, async (req, res) => {
+    app.post('/idea', async (req, res) => {
       const ideaData = req.body
       // console.log(ideaData);
       const result = await ideasCollection.insertOne(ideaData)
